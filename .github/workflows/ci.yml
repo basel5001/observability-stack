@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose config
+        run: docker compose config --quiet
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Shellcheck (if scripts exist)
+        run: |
+          if compgen -G "scripts/*.sh" > /dev/null 2>&1; then
+            shellcheck scripts/*.sh
+          else
+            echo "No shell scripts to check"
+          fi
+
+      - name: Validate Prometheus config
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/configs/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:latest \
+            promtool check config /etc/prometheus/prometheus.yml
+
+      - name: Validate Alertmanager config
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/configs/alertmanager:/etc/alertmanager:ro" \
+            prom/alertmanager:latest \
+            amtool check-config /etc/alertmanager/alertmanager.yml
+
+      - name: Lint Python (ai-analyzer)
+        uses: astral-sh/ruff-action@v3
+        with:
+          src: src/ai-analyzer/

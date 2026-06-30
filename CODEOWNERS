@@ -1,0 +1,11 @@
+# Default owners for the repository
+* @platform-team
+
+# Observability configs
+/configs/ @sre-team
+
+# AI analyzer
+/src/ai-analyzer/ @ml-team @sre-team
+
+# CI/CD
+/.github/ @platform-team
