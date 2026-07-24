@@ -8,7 +8,16 @@
 ![Tempo](https://img.shields.io/badge/Tempo-F46800?style=flat-square&logo=grafana&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-Self-hosted observability platform -- a Datadog alternative built on open-source components. One command to deploy a full metrics, logging, tracing, and alerting stack with AI-powered anomaly analysis.
+Self-hosted observability platform -- a Datadog alternative built on open-source components. One command to deploy a full **metrics, logging, tracing, and continuous profiling** stack with AI-powered anomaly analysis.
+
+## Four Pillars of Observability
+
+| Pillar | Tool | Purpose |
+|--------|------|---------|
+| Metrics | Prometheus | Time-series metrics collection and alerting |
+| Logs | Loki | Log aggregation with label-based indexing |
+| Traces | Grafana Tempo | Distributed tracing (OpenTelemetry/OTLP) |
+| Profiling | Parca | Continuous profiling (CPU, memory, goroutines) |
 
 ## Architecture
 
@@ -62,6 +71,7 @@ make up
 | Alertmanager   | http://localhost:9093   | Alert management         |
 | Loki           | http://localhost:3100   | Log aggregation          |
 | Tempo          | http://localhost:3200   | Distributed tracing      |
+| Parca          | http://localhost:7070   | Continuous profiling     |
 | AI Analyzer    | http://localhost:8000   | AI anomaly analysis      |
 | Node Exporter  | http://localhost:9100   | Host metrics             |
 | cAdvisor       | http://localhost:8080   | Container metrics        |
