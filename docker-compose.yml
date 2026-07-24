@@ -162,6 +162,28 @@ services:
     networks:
       - observability
 
+  parca:
+    image: ghcr.io/parca-dev/parca:latest
+    container_name: parca
+    restart: unless-stopped
+    ports:
+      - "7070:7070"
+    volumes:
+      - ./configs/parca/parca-config.yml:/etc/parca/parca.yaml:ro
+      - parca_data:/var/lib/parca
+    command:
+      - "/parca"
+      - "--config-path=/etc/parca/parca.yaml"
+      - "--storage-tsdb-path=/var/lib/parca"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:7070/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - observability
+
   ai-analyzer:
     build:
       context: ./src/ai-analyzer
@@ -196,4 +218,5 @@ volumes:
   grafana_data:
   loki_data:
   tempo_data:
+  parca_data:
   alertmanager_data:
